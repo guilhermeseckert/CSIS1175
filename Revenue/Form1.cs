@@ -138,44 +138,23 @@ namespace Revenue
         private void button3_Click(object sender, EventArgs e)
         {
 
-
-
-
             listBox1.Items.Clear();
 
-            // if (radioButton1.Checked == true)
-            // {
-            //  string[] result = movie.Where(x => x.ToLower().Contains(textBox1.Text.Trim().ToLower())).ToArray();
-
-            //  foreach (string i in result)
-            //  {
-            //int index = Array.IndexOf(movie, i);
-            //      listBox1.Items.Add(i + ">>>>>" + movieSales[index]);
-            //      }
-
-
-
-            //here numbers
-            
+            SelectionSortByRevenue();
             foreach (double i in movieSales)
             {
                 listBox1.Items.Add(i);
             }
-
-            // BinSrch(movieSales, double.Parse(textBox1.Text));
-
-            double[] array1 = new double[] { 1, 3, 5, 7, 7452893.21 };
-            BinSrch(movieSales, 7452893.21);
-
-
-
+            //double[] array1 = new double[] { 1, 3, 5, 7, 7452893.21 };
+            //BinSrch(movieSales, 7452893.21);
+            MessageBox.Show(BinSrch(movieSales, double.Parse(textBox1.Text)).ToString());
 
         }
 
 
-        public void BinSrch(double[] array, double key)
+        public int BinSrch(double[] array, double key)
         {
-            SelectionSortByRevenue();
+
             int min = 0;
             int max = array.Length - 1;
             bool found = false;
@@ -185,23 +164,26 @@ namespace Revenue
             {
                 int mid = (min + max) / 2;
 
-            
-
                 if (array[mid] == key)
                 {
-                    found = true;
-                    MessageBox.Show(key.ToString() + " achei");
-      
+                   // found = true;
+                   MessageBox.Show(key.ToString() + " achei");
+                    return mid;
+
+
                 }
-                else if (array[mid] > key)
-                    max = mid - 1;
                 else if (array[mid] < key)
+                    max = mid - 1;
+                else if (array[mid] > key)
                     min = mid + 1;
             }
             if (found == false)
-                Console.WriteLine($"{key} wasn't found in the array.");
+                MessageBox.Show("error");
+            return -1;
+               
 
         }
+    
 
 
     }
