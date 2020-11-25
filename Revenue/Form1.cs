@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Data.Linq;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
+
 
 namespace Revenue
 {
@@ -26,8 +23,6 @@ namespace Revenue
             InitializeComponent();
             ReadintoArray();
         }
-
-
 
 
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -138,16 +133,34 @@ namespace Revenue
         private void button3_Click(object sender, EventArgs e)
         {
 
-            listBox1.Items.Clear();
-
-            SelectionSortByRevenue();
-            foreach (double i in movieSales)
+            if(radioButton1.Checked == true)
             {
-                listBox1.Items.Add(i);
+                string[] searchmovie = movie.Where(x => x.ToLower().Contains(textBox1.Text.Trim())).ToArray();
+
+                foreach (string movie in searchmovie)
+                {
+                    listBox1.Items.Add(movie + "<<<<<<<<<" );
+                }
             }
-            //double[] array1 = new double[] { 1, 3, 5, 7, 7452893.21 };
-            //BinSrch(movieSales, 7452893.21);
-            MessageBox.Show(BinSrch(movieSales, double.Parse(textBox1.Text)).ToString());
+
+            if(radioButton2.Checked == true)
+            {
+                listBox1.Items.Clear();
+                listBox1.BackColor = Color.Red;
+                listBox1.ForeColor = Color.Black;
+                SelectionSortByRevenue();
+                if (movieSales[BinSrch(movieSales, double.Parse(textBox1.Text.Trim()))] != double.Parse(textBox1.Text.Trim()))
+                {
+                    listBox1.Items.Add("no movie has this exact renenue");
+                    listBox1.Items.Add("=====================================");
+                }
+                DisplayRevenue();
+            }
+
+            if(radioButton1.Checked == false && radioButton2.Checked == false)
+            {
+                MessageBox.Show("please select within name or Revenue");
+            }
 
         }
 
@@ -157,7 +170,7 @@ namespace Revenue
 
             int min = 0;
             int max = array.Length - 1;
-            bool found = false;
+          
 
 
             while (min <= max)
@@ -166,28 +179,50 @@ namespace Revenue
 
                 if (array[mid] == key)
                 {
-                   // found = true;
-                   MessageBox.Show(key.ToString() + " achei");
-                    return mid;
 
+                    return mid;
 
                 }
                 else if (array[mid] < key)
                     max = mid - 1;
                 else if (array[mid] > key)
                     min = mid + 1;
+                    
             }
-            if (found == false)
-                MessageBox.Show("error");
-            return -1;
-               
+
+                return min;
 
         }
-    
+
+        private void DisplayRevenue()
+        {
+            //MessageBox.Show(BinSrch(movieSales, double.Parse(textBox1.Text)).ToString());
+
+            if (textBox1 == null || string.IsNullOrWhiteSpace(textBox1.Text) || !Regex.IsMatch(textBox1.Text, "[ ^ 0-9]"))
+            {
+                MessageBox.Show("Not numeric - please re-enter");
+               
+            } else
+            {
+                 for (int i = BinSrch(movieSales, double.Parse(textBox1.Text.Trim())); i < Math.Max(movieSales.Length, movie.Length); i++)
+                {
+                    if (movieSales[BinSrch(movieSales, double.Parse(textBox1.Text.Trim())) ]== double.Parse(textBox1.Text.Trim())) {
+                        listBox1.Items.Add(movie[i] + "<<<<<<<<<" + movieSales[i].ToString("c"));
+
+                    } else
+
+                        listBox1.Items.Add(movie[i] + "<<<<<<<<<" + movieSales[i].ToString("c"));
+                    }
+
+                }
+            }
 
 
-    }
-}
+
+        }
+
+  }
+
 
 
 
