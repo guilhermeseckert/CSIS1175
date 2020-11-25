@@ -118,16 +118,9 @@ namespace Revenue
                 }
             }
 
-            for (int i = 0; i < Math.Max(movieSales.Length, movie.Length); i++)
-            {
-                listBox1.Items.Add(movie[i] + ">>>>>>>>" + movieSales[i].ToString("c"));
-            }
-
         }
 
-        //cteste
-
-
+ 
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -135,6 +128,10 @@ namespace Revenue
             listBox1.BackColor = Color.Red;
             listBox1.ForeColor = Color.Black;
             SelectionSortByRevenue();
+            for (int i = 0; i < Math.Max(movieSales.Length, movie.Length); i++)
+            {
+                listBox1.Items.Add(movie[i] + ">>>>>>>>" + movieSales[i].ToString("c"));
+            }
 
         }
 
@@ -146,58 +143,56 @@ namespace Revenue
 
             listBox1.Items.Clear();
 
-            if (radioButton1.Checked == true)
+            // if (radioButton1.Checked == true)
+            // {
+            //  string[] result = movie.Where(x => x.ToLower().Contains(textBox1.Text.Trim().ToLower())).ToArray();
+
+            //  foreach (string i in result)
+            //  {
+            //int index = Array.IndexOf(movie, i);
+            //      listBox1.Items.Add(i + ">>>>>" + movieSales[index]);
+            //      }
+
+
+
+            //here numbers
+            SelectionSortByRevenue();
+            foreach (double i in movieSales)
             {
-                string[] result = movie.Where(x => x.ToLower().Contains(textBox1.Text.Trim().ToLower())).ToArray();
-
-                foreach (string i in result)
-                {
-                    int index = Array.IndexOf(movie, i);
-                    listBox1.Items.Add(i + ">>>>>" + movieSales[index]);
-                }
-
+                listBox1.Items.Add(i);
             }
 
-            if(radioButton2.Checked == true)
-            {
+           // BinSrch(movieSales, double.Parse(textBox1.Text));
 
-                
+            MessageBox.Show(BinSrch(movieSales, 7452893.21).ToString());
 
-            }
-          
-
-
-
-
-
+    
+            
+         
         }
 
-        public int BinarySearchIterative(double[] inputArray, double key)
+
+        public  double BinSrch(double[] arr, double key)
         {
             int min = 0;
-            int max = inputArray.Length - 1;
-            while (min <= max)
+            int N = arr.Length;
+            int max = N - 1;
+            do
             {
                 int mid = (min + max) / 2;
-                if (key == inputArray[mid])
-                {
-                    return ++mid;
-                }
-                else if (key < inputArray[mid])
-                {
-                    max = mid - 1;
-                }
-                else
-                {
+                if (key > arr[mid])
                     min = mid + 1;
-                }
-            }
+                else
+                    max = mid - 1;
+                if (arr[mid] == key)
+                    return mid;
+            } while (min <= max);
             return -1;
+        }
+
         }
 
 
     }
-
-}
 
     
