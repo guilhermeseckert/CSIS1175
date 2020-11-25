@@ -27,7 +27,7 @@ namespace Revenue
             ReadintoArray();
         }
 
-   
+
 
 
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -37,22 +37,22 @@ namespace Revenue
 
         private void ReadintoArray()
         {
-          
-      
+
+
 
             var lines = File.ReadLines(pathMovie).ToArray();
-            string []fields;
+            string[] fields;
             movie = new string[size];
             double output;
             movieSales = new double[size];
 
             for (int i = 0; i < lines.Length; i++)
             {
-               fields = lines[i].Split('@', '}', '@', '=', '~');
+                fields = lines[i].Split('@', '}', '@', '=', '~');
                 movie[i] = fields[0].Trim();
                 double.TryParse(fields[1].Trim(), out output);
                 movieSales[i] = output;
-     
+
             }
 
 
@@ -72,7 +72,7 @@ namespace Revenue
 
         }
 
-        static void SelectionSortByName(string[] movie, double[] sale )
+        static void SelectionSortByName(string[] movie, double[] sale)
         {
             int pos = 1;
             while (pos < movie.Length)
@@ -80,7 +80,7 @@ namespace Revenue
                 if (String.Compare(movie[pos], movie[pos - 1], StringComparison.OrdinalIgnoreCase) >= 0)
                 {
                     pos++;
-        
+
                 }
                 else
                 {
@@ -120,7 +120,7 @@ namespace Revenue
 
         }
 
- 
+
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -138,7 +138,7 @@ namespace Revenue
         private void button3_Click(object sender, EventArgs e)
         {
 
-          
+
 
 
             listBox1.Items.Clear();
@@ -156,43 +156,56 @@ namespace Revenue
 
 
             //here numbers
-            SelectionSortByRevenue();
+            
             foreach (double i in movieSales)
             {
                 listBox1.Items.Add(i);
             }
 
-           // BinSrch(movieSales, double.Parse(textBox1.Text));
+            // BinSrch(movieSales, double.Parse(textBox1.Text));
 
-            MessageBox.Show(BinSrch(movieSales, 7452893.21).ToString());
+            double[] array1 = new double[] { 1, 3, 5, 7, 7452893.21 };
+            BinSrch(movieSales, 7452893.21);
 
-    
-            
-         
+
+
+
         }
 
 
-        public  double BinSrch(double[] arr, double key)
+        public void BinSrch(double[] array, double key)
         {
+            SelectionSortByRevenue();
             int min = 0;
-            int N = arr.Length;
-            int max = N - 1;
-            do
+            int max = array.Length - 1;
+            bool found = false;
+
+
+            while (min <= max)
             {
                 int mid = (min + max) / 2;
-                if (key > arr[mid])
-                    min = mid + 1;
-                else
+
+            
+
+                if (array[mid] == key)
+                {
+                    found = true;
+                    MessageBox.Show(key.ToString() + " achei");
+      
+                }
+                else if (array[mid] > key)
                     max = mid - 1;
-                if (arr[mid] == key)
-                    return mid;
-            } while (min <= max);
-            return -1;
-        }
+                else if (array[mid] < key)
+                    min = mid + 1;
+            }
+            if (found == false)
+                Console.WriteLine($"{key} wasn't found in the array.");
 
         }
 
 
     }
+}
 
-    
+
+
