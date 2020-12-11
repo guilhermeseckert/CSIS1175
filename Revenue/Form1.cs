@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using System.Text.RegularExpressions;
 
 
 namespace Revenue
@@ -22,11 +21,12 @@ namespace Revenue
         {
             InitializeComponent();
             ReadintoArray();
+            radioButton1.Checked = true;
         }
 
 
         private void groupBox1_Enter(object sender, EventArgs e)
-        {
+        {e
 
         }
 
@@ -132,96 +132,134 @@ namespace Revenue
 
         private void button3_Click(object sender, EventArgs e)
         {
-
-            if(radioButton1.Checked == true)
+           
+              
+          try {
+     
+            if (radioButton1.Checked == true)
             {
-                string[] searchmovie = movie.Where(x => x.ToLower().Contains(textBox1.Text.Trim())).ToArray();
-
-                foreach (string movie in searchmovie)
-                {
-                    listBox1.Items.Add(movie + "<<<<<<<<<" );
-                }
-            }
-
-            if(radioButton2.Checked == true)
-            {
+                
                 listBox1.Items.Clear();
-                listBox1.BackColor = Color.Red;
-                listBox1.ForeColor = Color.Black;
-                SelectionSortByRevenue();
-                if (movieSales[BinSrch(movieSales, double.Parse(textBox1.Text.Trim()))] != double.Parse(textBox1.Text.Trim()))
-                {
-                    listBox1.Items.Add("no movie has this exact renenue");
-                    listBox1.Items.Add("=====================================");
+                listBox1.BackColor = Color.Blue;
+                listBox1.ForeColor = Color.Yellow;
+                SelectionSortByName(movie, movieSales);
+
+              
+
+
+                for (int i = 0; i < movie.Length; i++)
+                { 
+                if(movie[i].ToLower().Contains(textBox1.Text.ToLower().Trim()))
+                    {
+                        if(movie[i].Trim().ToLower() == textBox1.Text.Trim().ToLower())
+                        {
+                            listBox1.Items.Add(movie[i] +">>>>>>>>" + movieSales[i].ToString("c") + " " + "**Exact Match**");
+                        }
+
+                        if (movie[i].Trim().ToLower() != textBox1.Text.Trim().ToLower())
+                        {
+                            listBox1.Items.Add(movie[i]+ ">>>>>>>>> " + movieSales[i].ToString("c"));
+                        }
+
+                    }
+
                 }
-                DisplayRevenue();
+
+               if(listBox1.Items.Count == 0 )
+                {
+                    listBox1.Items.Add("No movie with those characters");
+                }
+                
+
             }
 
-            if(radioButton1.Checked == false && radioButton2.Checked == false)
+            if (radioButton2.Checked == true)
+                {
+
+                    listBox1.Items.Clear();
+                    listBox1.BackColor = Color.Red;
+                    listBox1.ForeColor = Color.Black;
+                    SelectionSortByRevenue();
+               
+
+                if (movieSales[BinSrch(movieSales, double.Parse(textBox1.Text.Trim()))] != double.Parse(textBox1.Text.Trim()))
+                    {
+                        listBox1.Items.Add("no movie has this exact renenue");
+                        listBox1.Items.Add("=====================================");
+                    }
+                    DisplayRevenue();
+                }
+
+                if (radioButton1.Checked == false && radioButton2.Checked == false)
+                {
+                    MessageBox.Show("please select within name or Revenue");
+                }
+
+            }
+            catch(Exception)
             {
-                MessageBox.Show("please select within name or Revenue");
+                MessageBox.Show("Not numeric - please re-enter");
             }
 
         }
 
 
         public int BinSrch(double[] array, double key)
-        {
-
-            int min = 0;
-            int max = array.Length - 1;
-          
-
-
-            while (min <= max)
             {
-                int mid = (min + max) / 2;
 
-                if (array[mid] == key)
+                int min = 0;
+                int max = array.Length - 1;
+
+
+
+                while (min <= max)
                 {
+                    int mid = (min + max) / 2;
 
-                    return mid;
+                    if (array[mid] == key)
+                    {
+
+                        return mid;
+
+                    }
+                    else if (array[mid] < key)
+                        max = mid - 1;
+                    else if (array[mid] > key)
+                        min = mid + 1;
 
                 }
-                else if (array[mid] < key)
-                    max = mid - 1;
-                else if (array[mid] > key)
-                    min = mid + 1;
-                    
-            }
 
                 return min;
 
-        }
+            }
 
-        private void DisplayRevenue()
-        {
-            //MessageBox.Show(BinSrch(movieSales, double.Parse(textBox1.Text)).ToString());
-
-            if (textBox1 == null || string.IsNullOrWhiteSpace(textBox1.Text) || !Regex.IsMatch(textBox1.Text, "[ ^ 0-9]"))
+            private void DisplayRevenue()
             {
-                MessageBox.Show("Not numeric - please re-enter");
-               
-            } else
-            {
-                 for (int i = BinSrch(movieSales, double.Parse(textBox1.Text.Trim())); i < Math.Max(movieSales.Length, movie.Length); i++)
-                {
-                    if (movieSales[BinSrch(movieSales, double.Parse(textBox1.Text.Trim())) ]== double.Parse(textBox1.Text.Trim())) {
-                        listBox1.Items.Add(movie[i] + "<<<<<<<<<" + movieSales[i].ToString("c"));
+         
+              
+                    for (int i = BinSrch(movieSales, double.Parse(textBox1.Text.Trim())); i < Math.Max(movieSales.Length, movie.Length); i++)
+                    {
+                        if (movieSales[BinSrch(movieSales, double.Parse(textBox1.Text.Trim()))] == double.Parse(textBox1.Text.Trim()))
+                        {
+                            listBox1.Items.Add(movie[i] + "<<<<<<<<<" + movieSales[i].ToString("c"));
 
-                    } else
+                        }
+                        else
 
-                        listBox1.Items.Add(movie[i] + "<<<<<<<<<" + movieSales[i].ToString("c"));
+                            listBox1.Items.Add(movie[i] + "<<<<<<<<<" + movieSales[i].ToString("c"));
                     }
 
-                }
+                
             }
 
 
 
         }
 
-  }
+   
+}
+
+
 
 
 
